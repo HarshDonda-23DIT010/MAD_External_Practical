@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:file_picker/file_picker.dart';
 import '../providers/file_provider.dart';
 import '../utils/app_theme.dart';
 
@@ -16,6 +17,7 @@ class _FileUploadScreenState extends State<FileUploadScreen> {
   final _descriptionController = TextEditingController();
   String _selectedFileType = 'pdf';
   bool _isLoading = false;
+  int _fileSize = 0;
 
   final List<Map<String, dynamic>> _fileTypes = [
     {'type': 'pdf', 'label': 'PDF', 'icon': Icons.picture_as_pdf_rounded},
@@ -34,6 +36,50 @@ class _FileUploadScreenState extends State<FileUploadScreen> {
     super.dispose();
   }
 
+  Future<void> _pickFile() async {
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles();
+      
+      if (result != null) {
+        PlatformFile file = result.files.first;
+        
+        setState(() {
+          _fileNameController.text = file.name;
+          _fileSize = file.size;
+          
+          if (file.extension != null) {
+            String ext = file.extension!.toLowerCase();
+            // Map common extensions to our predefined types
+            if (['jpg', 'jpeg', 'png', 'gif'].contains(ext)) {
+              _selectedFileType = 'jpg';
+            } else if (['doc', 'docx'].contains(ext)) {
+              _selectedFileType = 'docx';
+            } else if (['ppt', 'pptx'].contains(ext)) {
+              _selectedFileType = 'pptx';
+            } else if (['xls', 'xlsx', 'csv'].contains(ext)) {
+              _selectedFileType = 'xlsx';
+            } else if (['zip', 'rar', '7z'].contains(ext)) {
+              _selectedFileType = 'zip';
+            } else if (ext == 'txt') {
+              _selectedFileType = 'txt';
+            } else if (ext == 'pdf') {
+              _selectedFileType = 'pdf';
+            } else {
+              // If not matched, default to txt or keep previous
+              _selectedFileType = 'txt';
+            }
+          }
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error picking file: $e')),
+        );
+      }
+    }
+  }
+
   void _handleSubmit() async {
     if (!_formKey.currentState!.validate()) return;
     final provider = context.read<FileProvider>();
@@ -50,6 +96,7 @@ class _FileUploadScreenState extends State<FileUploadScreen> {
       fileName: fileName,
       fileType: _selectedFileType,
       description: _descriptionController.text.trim(),
+      fileSize: _fileSize,
     );
     setState(() => _isLoading = false);
     if (mounted) {
@@ -78,16 +125,34 @@ class _FileUploadScreenState extends State<FileUploadScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Center(
-                child: Container(
-                  width: 100, height: 100,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(colors: [
-                      AppTheme.primaryColor.withValues(alpha: 0.2),
-                      AppTheme.accentColor.withValues(alpha: 0.1),
-                    ]),
-                    borderRadius: BorderRadius.circular(28),
+                child: GestureDetector(
+                  onTap: _pickFile,
+                  child: Container(
+                    width: 140, height: 140,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(colors: [
+                        AppTheme.primaryColor.withValues(alpha: 0.2),
+                        AppTheme.accentColor.withValues(alpha: 0.1),
+                      ]),
+                      borderRadius: BorderRadius.circular(28),
+                      border: Border.all(
+                        color: AppTheme.primaryColor.withValues(alpha: 0.5),
+                        width: 2,
+                        style: BorderStyle.solid,
+                      ),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.file_upload_rounded, size: 50, color: AppTheme.primaryColor),
+                        const SizedBox(height: 12),
+                        Text('Browse File', style: TextStyle(
+                          color: AppTheme.primaryColor.withValues(alpha: 0.8),
+                          fontWeight: FontWeight.bold,
+                        )),
+                      ],
+                    ),
                   ),
-                  child: const Icon(Icons.cloud_upload_rounded, size: 50, color: AppTheme.primaryColor),
                 ),
               ),
               const SizedBox(height: 24),
@@ -100,7 +165,14 @@ class _FileUploadScreenState extends State<FileUploadScreen> {
                 validator: (v) => (v == null || v.trim().isEmpty) ? 'Required' : (v.trim().length < 3 ? 'Min 3 chars' : null),
               ),
               const SizedBox(height: 20),
-              const Text('File Type', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppTheme.textSecondary)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text('File Type', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppTheme.textSecondary)),
+                  if (_fileSize > 0)
+                    Text('Size: ${AppTheme.formatFileSize(_fileSize)}', style: const TextStyle(fontSize: 12, color: AppTheme.textHint)),
+                ],
+              ),
               const SizedBox(height: 10),
               Wrap(
                 spacing: 8, runSpacing: 8,
@@ -143,7 +215,7 @@ class _FileUploadScreenState extends State<FileUploadScreen> {
                   child: _isLoading
                       ? const SizedBox(width: 22, height: 22, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
                       : const Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                          Icon(Icons.upload_file_rounded), SizedBox(width: 8), Text('Upload File', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                          Icon(Icons.save_rounded), SizedBox(width: 8), Text('Save File to Library', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                         ]),
                 ),
               ),
