@@ -78,14 +78,7 @@ class _FileUploadScreenState extends State<FileUploadScreen> {
           }
         });
 
-        if (kIsWeb && mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Note: Browsers block file paths. Run the app as a Windows/Android app to use the "Open File" feature!'),
-              duration: Duration(seconds: 4),
-            ),
-          );
-        }
+
       }
     } catch (e) {
       if (mounted) {
