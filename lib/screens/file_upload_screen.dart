@@ -101,10 +101,11 @@ class _FileUploadScreenState extends State<FileUploadScreen> {
     }
     setState(() => _isLoading = true);
     await Future.delayed(const Duration(milliseconds: 500));
+    final desc = _descriptionController.text.trim();
     provider.addFile(
       fileName: fileName,
       fileType: _selectedFileType,
-      description: _descriptionController.text.trim(),
+      description: desc.isEmpty ? 'No description provided' : desc,
       fileSize: _fileSize,
       filePath: _filePath,
     );
@@ -208,14 +209,14 @@ class _FileUploadScreenState extends State<FileUploadScreen> {
                 }).toList(),
               ),
               const SizedBox(height: 20),
-              const Text('Description', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppTheme.textSecondary)),
+              const Text('Description (Optional)', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppTheme.textSecondary)),
               const SizedBox(height: 8),
               TextFormField(
                 controller: _descriptionController,
                 style: const TextStyle(color: AppTheme.textPrimary),
                 maxLines: 4,
                 decoration: const InputDecoration(hintText: 'Describe your file...'),
-                validator: (v) => (v == null || v.trim().isEmpty) ? 'Required' : null,
+                // Description is now optional, no validator needed
               ),
               const SizedBox(height: 30),
               SizedBox(
