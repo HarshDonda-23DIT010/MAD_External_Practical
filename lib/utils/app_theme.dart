@@ -3,24 +3,24 @@ import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
   // Primary Colors
-  static const Color primaryColor = Color(0xFF6C63FF);
-  static const Color primaryDark = Color(0xFF5A52D5);
-  static const Color primaryLight = Color(0xFF8B85FF);
+  static const Color primaryColor = Color(0xFF4F46E5);
+  static const Color primaryDark = Color(0xFF3730A3);
+  static const Color primaryLight = Color(0xFF818CF8);
 
   // Accent Colors
-  static const Color accentColor = Color(0xFF00D2FF);
-  static const Color accentDark = Color(0xFF00B4D8);
+  static const Color accentColor = Color(0xFF0EA5E9);
+  static const Color accentDark = Color(0xFF0369A1);
 
   // Background Colors
-  static const Color scaffoldBg = Color(0xFF0F0F23);
-  static const Color cardBg = Color(0xFF1A1A2E);
-  static const Color surfaceBg = Color(0xFF16213E);
-  static const Color surfaceLight = Color(0xFF1F2B47);
+  static const Color scaffoldBg = Color(0xFFF3F4F6);
+  static const Color cardBg = Color(0xFFFFFFFF);
+  static const Color surfaceBg = Color(0xFFF9FAFB);
+  static const Color surfaceLight = Color(0xFFE5E7EB);
 
   // Text Colors
-  static const Color textPrimary = Color(0xFFE8E8E8);
-  static const Color textSecondary = Color(0xFF9E9E9E);
-  static const Color textHint = Color(0xFF6B6B6B);
+  static const Color textPrimary = Color(0xFF111827);
+  static const Color textSecondary = Color(0xFF4B5563);
+  static const Color textHint = Color(0xFF9CA3AF);
 
   // Status Colors
   static const Color success = Color(0xFF00E676);
@@ -46,7 +46,7 @@ class AppTheme {
   );
 
   static const LinearGradient cardGradient = LinearGradient(
-    colors: [Color(0xFF1A1A2E), Color(0xFF16213E)],
+    colors: [Color(0xFFFFFFFF), Color(0xFFF9FAFB)],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
@@ -57,19 +57,19 @@ class AppTheme {
     end: Alignment.bottomRight,
   );
 
-  static ThemeData get darkTheme {
+  static ThemeData get lightTheme {
     return ThemeData(
-      brightness: Brightness.dark,
+      brightness: Brightness.light,
       primaryColor: primaryColor,
       scaffoldBackgroundColor: scaffoldBg,
-      colorScheme: const ColorScheme.dark(
+      colorScheme: const ColorScheme.light(
         primary: primaryColor,
         secondary: accentColor,
         surface: cardBg,
         error: error,
       ),
       textTheme: GoogleFonts.interTextTheme(
-        ThemeData.dark().textTheme,
+        ThemeData.light().textTheme,
       ),
       appBarTheme: AppBarTheme(
         backgroundColor: scaffoldBg,
@@ -100,7 +100,7 @@ class AppTheme {
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(color: Color(0xFF2A2A4A), width: 1),
+          borderSide: const BorderSide(color: Color(0xFFE5E7EB), width: 1),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
@@ -141,7 +141,7 @@ class AppTheme {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
-        side: const BorderSide(color: Color(0xFF2A2A4A)),
+        side: const BorderSide(color: Color(0xFFE5E7EB)),
       ),
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         backgroundColor: cardBg,
