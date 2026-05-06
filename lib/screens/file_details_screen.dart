@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:open_filex/open_filex.dart';
 import '../providers/file_provider.dart';
 import '../models/file_model.dart';
 import '../utils/app_theme.dart';
@@ -89,6 +90,22 @@ class _FileDetailsScreenState extends State<FileDetailsScreen> with SingleTicker
                   _chip(AppTheme.formatFileSize(file.fileSize), AppTheme.textSecondary),
                   if (file.isShared) ...[const SizedBox(width: 6), _chip('Shared', AppTheme.primaryColor)],
                 ]),
+                if (file.filePath != null) ...[
+                  const SizedBox(height: 12),
+                  SizedBox(
+                    height: 32,
+                    child: ElevatedButton.icon(
+                      onPressed: () => OpenFilex.open(file.filePath),
+                      icon: const Icon(Icons.open_in_new_rounded, size: 16),
+                      label: const Text('Open File', style: TextStyle(fontSize: 12)),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppTheme.primaryColor,
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                      ),
+                    ),
+                  ),
+                ],
               ])),
             ]),
           ),

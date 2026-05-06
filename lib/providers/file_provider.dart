@@ -123,6 +123,7 @@ class FileProvider extends ChangeNotifier {
     required String fileType,
     required String description,
     int fileSize = 0,
+    String? filePath,
   }) {
     final id = _uuid.v4();
     final now = DateTime.now();
@@ -135,6 +136,7 @@ class FileProvider extends ChangeNotifier {
       createdAt: now,
       updatedAt: now,
       fileSize: fileSize > 0 ? fileSize : _generateMockFileSize(fileType),
+      filePath: filePath,
     );
 
     _fileBox.put(id, file);

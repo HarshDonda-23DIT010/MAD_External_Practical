@@ -40,6 +40,9 @@ class FileModel extends HiveObject {
   @HiveField(11)
   int fileSize; // in bytes (mock)
 
+  @HiveField(12)
+  String? filePath; // actual path to view the file
+
   FileModel({
     required this.id,
     required this.fileName,
@@ -53,6 +56,7 @@ class FileModel extends HiveObject {
     this.isSynced = false,
     this.ownerId = 'current_user',
     this.fileSize = 0,
+    this.filePath,
   });
 
   FileModel copyWith({
@@ -68,6 +72,7 @@ class FileModel extends HiveObject {
     bool? isSynced,
     String? ownerId,
     int? fileSize,
+    String? filePath,
   }) {
     return FileModel(
       id: id ?? this.id,
@@ -82,6 +87,7 @@ class FileModel extends HiveObject {
       isSynced: isSynced ?? this.isSynced,
       ownerId: ownerId ?? this.ownerId,
       fileSize: fileSize ?? this.fileSize,
+      filePath: filePath ?? this.filePath,
     );
   }
 }

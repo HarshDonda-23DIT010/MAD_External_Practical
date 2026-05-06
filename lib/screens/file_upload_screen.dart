@@ -18,6 +18,7 @@ class _FileUploadScreenState extends State<FileUploadScreen> {
   String _selectedFileType = 'pdf';
   bool _isLoading = false;
   int _fileSize = 0;
+  String? _filePath;
 
   final List<Map<String, dynamic>> _fileTypes = [
     {'type': 'pdf', 'label': 'PDF', 'icon': Icons.picture_as_pdf_rounded},
@@ -46,6 +47,7 @@ class _FileUploadScreenState extends State<FileUploadScreen> {
         setState(() {
           _fileNameController.text = file.name;
           _fileSize = file.size;
+          _filePath = file.path;
           
           if (file.extension != null) {
             String ext = file.extension!.toLowerCase();
@@ -97,6 +99,7 @@ class _FileUploadScreenState extends State<FileUploadScreen> {
       fileType: _selectedFileType,
       description: _descriptionController.text.trim(),
       fileSize: _fileSize,
+      filePath: _filePath,
     );
     setState(() => _isLoading = false);
     if (mounted) {
