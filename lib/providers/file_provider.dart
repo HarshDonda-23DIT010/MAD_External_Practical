@@ -5,6 +5,7 @@ import 'package:uuid/uuid.dart';
 import '../models/file_model.dart';
 import '../models/version_model.dart';
 import '../models/comment_model.dart';
+import '../services/mongo_service.dart';
 
 class FileProvider extends ChangeNotifier {
   final Box<FileModel> _fileBox = Hive.box<FileModel>('files');
@@ -143,6 +144,7 @@ class FileProvider extends ChangeNotifier {
     );
 
     _fileBox.put(id, file);
+    MongoService.upsertFile(file.toMap());
 
     // Create initial version
     _addVersion(
@@ -178,6 +180,7 @@ class FileProvider extends ChangeNotifier {
     file.isSynced = false;
 
     file.save();
+    MongoService.upsertFile(file.toMap());
 
     _addVersion(
       fileId: fileId,
@@ -193,6 +196,7 @@ class FileProvider extends ChangeNotifier {
   /// Delete a file and its versions/comments
   void deleteFile(String fileId) {
     _fileBox.delete(fileId);
+    MongoService.deleteFile(fileId);
 
     // Delete associated versions
     final versions =
@@ -226,6 +230,7 @@ class FileProvider extends ChangeNotifier {
     file.updatedAt = DateTime.now();
     file.isSynced = false;
     file.save();
+    MongoService.upsertFile(file.toMap());
 
     notifyListeners();
   }
@@ -240,6 +245,7 @@ class FileProvider extends ChangeNotifier {
     file.updatedAt = DateTime.now();
     file.isSynced = false;
     file.save();
+    MongoService.upsertFile(file.toMap());
 
     notifyListeners();
   }
@@ -272,6 +278,7 @@ class FileProvider extends ChangeNotifier {
     );
 
     _versionBox.put(id, version);
+    MongoService.upsertVersion(version.toMap());
   }
 
   /// Resolve conflict by keeping latest version
@@ -318,11 +325,13 @@ class FileProvider extends ChangeNotifier {
     );
 
     _commentBox.put(id, comment);
+    MongoService.upsertComment(comment.toMap());
     notifyListeners();
   }
 
   void deleteComment(String commentId) {
     _commentBox.delete(commentId);
+    MongoService.deleteComment(commentId);
     notifyListeners();
   }
 
@@ -339,18 +348,21 @@ class FileProvider extends ChangeNotifier {
     for (var file in _fileBox.values.where((f) => !f.isSynced)) {
       file.isSynced = true;
       file.save();
+      MongoService.upsertFile(file.toMap());
     }
 
     // Mark all versions as synced
     for (var version in _versionBox.values.where((v) => !v.isSynced)) {
       version.isSynced = true;
       version.save();
+      MongoService.upsertVersion(version.toMap());
     }
 
     // Mark all comments as synced
     for (var comment in _commentBox.values.where((c) => !c.isSynced)) {
       comment.isSynced = true;
       comment.save();
+      MongoService.upsertComment(comment.toMap());
     }
 
     notifyListeners();

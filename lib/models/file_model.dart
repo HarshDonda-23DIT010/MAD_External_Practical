@@ -97,4 +97,23 @@ class FileModel extends HiveObject {
       fileBytes: fileBytes ?? this.fileBytes,
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'fileName': fileName,
+      'fileType': fileType,
+      'description': description,
+      'createdAt': createdAt.toIso8601String(),
+      'updatedAt': updatedAt.toIso8601String(),
+      'isShared': isShared,
+      'sharedWith': sharedWith,
+      'currentVersion': currentVersion,
+      'isSynced': isSynced,
+      'ownerId': ownerId,
+      'fileSize': fileSize,
+      'filePath': filePath,
+      'fileBytes': fileBytes,
+    };
+  }
 }

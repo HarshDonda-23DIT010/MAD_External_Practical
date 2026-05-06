@@ -11,6 +11,7 @@ import 'screens/home_screen.dart';
 import 'screens/file_upload_screen.dart';
 import 'screens/file_details_screen.dart';
 import 'utils/app_theme.dart';
+import 'services/mongo_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,6 +28,9 @@ void main() async {
   await Hive.openBox<FileModel>('files');
   await Hive.openBox<VersionModel>('versions');
   await Hive.openBox<CommentModel>('comments');
+
+  // Initialize MongoDB connection
+  await MongoService.connect();
 
   runApp(
     MultiProvider(

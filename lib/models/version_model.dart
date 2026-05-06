@@ -42,4 +42,18 @@ class VersionModel extends HiveObject {
     this.isConflict = false,
     this.conflictResolution = '',
   });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'fileId': fileId,
+      'versionNumber': versionNumber,
+      'timestamp': timestamp.toIso8601String(),
+      'changeDescription': changeDescription,
+      'modifiedBy': modifiedBy,
+      'isSynced': isSynced,
+      'isConflict': isConflict,
+      'conflictResolution': conflictResolution,
+    };
+  }
 }

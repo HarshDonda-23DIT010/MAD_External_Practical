@@ -30,4 +30,15 @@ class CommentModel extends HiveObject {
     this.authorName = 'You',
     this.isSynced = false,
   });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'fileId': fileId,
+      'commentText': commentText,
+      'timestamp': timestamp.toIso8601String(),
+      'authorName': authorName,
+      'isSynced': isSynced,
+    };
+  }
 }
