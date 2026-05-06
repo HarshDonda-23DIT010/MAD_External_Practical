@@ -99,7 +99,14 @@ class _FileDetailsScreenState extends State<FileDetailsScreen> with SingleTicker
                     child: ElevatedButton.icon(
                       onPressed: () {
                         if (kIsWeb && file.fileBytes != null) {
-                          final blob = html.Blob([file.fileBytes!]);
+                          String mimeType = 'application/octet-stream';
+                          final ext = file.fileType.toLowerCase();
+                          if (ext == 'pdf') mimeType = 'application/pdf';
+                          else if (ext == 'jpg' || ext == 'jpeg') mimeType = 'image/jpeg';
+                          else if (ext == 'png') mimeType = 'image/png';
+                          else if (ext == 'txt') mimeType = 'text/plain';
+                          
+                          final blob = html.Blob([file.fileBytes!], mimeType);
                           final url = html.Url.createObjectUrlFromBlob(blob);
                           html.window.open(url, '_blank');
                           html.Url.revokeObjectUrl(url);
