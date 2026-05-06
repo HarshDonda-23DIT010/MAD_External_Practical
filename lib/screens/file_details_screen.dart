@@ -95,7 +95,7 @@ class _FileDetailsScreenState extends State<FileDetailsScreen> with SingleTicker
                   SizedBox(
                     height: 32,
                     child: ElevatedButton.icon(
-                      onPressed: () => OpenFilex.open(file.filePath),
+                      onPressed: () => OpenFilex.open(file.filePath!),
                       icon: const Icon(Icons.open_in_new_rounded, size: 16),
                       label: const Text('Open File', style: TextStyle(fontSize: 12)),
                       style: ElevatedButton.styleFrom(
