@@ -253,7 +253,7 @@ class _SearchFilterScreenState extends State<SearchFilterScreen> {
                                 overflow: TextOverflow.ellipsis,
                               ),
                               subtitle: Padding(
-                                padding: const EdgeInsets.top(4),
+                                padding: const EdgeInsets.only(top: 4),
                                 child: Row(
                                   children: [
                                     Text(
