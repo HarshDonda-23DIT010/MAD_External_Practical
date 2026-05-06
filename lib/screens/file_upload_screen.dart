@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:provider/provider.dart';
 import 'package:file_picker/file_picker.dart';
 import '../providers/file_provider.dart';
@@ -47,7 +48,11 @@ class _FileUploadScreenState extends State<FileUploadScreen> {
         setState(() {
           _fileNameController.text = file.name;
           _fileSize = file.size;
-          _filePath = file.path;
+          try {
+            _filePath = kIsWeb ? null : file.path;
+          } catch (_) {
+            _filePath = null;
+          }
           
           if (file.extension != null) {
             String ext = file.extension!.toLowerCase();
@@ -72,6 +77,15 @@ class _FileUploadScreenState extends State<FileUploadScreen> {
             }
           }
         });
+
+        if (kIsWeb && mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Note: Browsers block file paths. Run the app as a Windows/Android app to use the "Open File" feature!'),
+              duration: Duration(seconds: 4),
+            ),
+          );
+        }
       }
     } catch (e) {
       if (mounted) {
