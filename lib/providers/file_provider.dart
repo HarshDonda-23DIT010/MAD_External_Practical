@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'dart:typed_data';
 import 'package:hive/hive.dart';
 import 'package:uuid/uuid.dart';
 import '../models/file_model.dart';
@@ -124,6 +125,7 @@ class FileProvider extends ChangeNotifier {
     required String description,
     int fileSize = 0,
     String? filePath,
+    Uint8List? fileBytes,
   }) {
     final id = _uuid.v4();
     final now = DateTime.now();
@@ -137,6 +139,7 @@ class FileProvider extends ChangeNotifier {
       updatedAt: now,
       fileSize: fileSize > 0 ? fileSize : _generateMockFileSize(fileType),
       filePath: filePath,
+      fileBytes: fileBytes,
     );
 
     _fileBox.put(id, file);

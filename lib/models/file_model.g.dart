@@ -30,13 +30,14 @@ class FileModelAdapter extends TypeAdapter<FileModel> {
       ownerId: fields[10] as String,
       fileSize: fields[11] as int,
       filePath: fields[12] as String?,
+      fileBytes: fields[13] as Uint8List?,
     );
   }
 
   @override
   void write(BinaryWriter writer, FileModel obj) {
     writer
-      ..writeByte(13)
+      ..writeByte(14)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -62,7 +63,9 @@ class FileModelAdapter extends TypeAdapter<FileModel> {
       ..writeByte(11)
       ..write(obj.fileSize)
       ..writeByte(12)
-      ..write(obj.filePath);
+      ..write(obj.filePath)
+      ..writeByte(13)
+      ..write(obj.fileBytes);
   }
 
   @override

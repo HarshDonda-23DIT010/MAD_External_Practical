@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'dart:typed_data';
 import 'package:provider/provider.dart';
 import 'package:file_picker/file_picker.dart';
 import '../providers/file_provider.dart';
@@ -20,6 +21,7 @@ class _FileUploadScreenState extends State<FileUploadScreen> {
   bool _isLoading = false;
   int _fileSize = 0;
   String? _filePath;
+  Uint8List? _fileBytes;
 
   final List<Map<String, dynamic>> _fileTypes = [
     {'type': 'pdf', 'label': 'PDF', 'icon': Icons.picture_as_pdf_rounded},
@@ -48,6 +50,7 @@ class _FileUploadScreenState extends State<FileUploadScreen> {
         setState(() {
           _fileNameController.text = file.name;
           _fileSize = file.size;
+          _fileBytes = file.bytes;
           try {
             _filePath = kIsWeb ? null : file.path;
           } catch (_) {
@@ -108,6 +111,7 @@ class _FileUploadScreenState extends State<FileUploadScreen> {
       description: desc.isEmpty ? 'No description provided' : desc,
       fileSize: _fileSize,
       filePath: _filePath,
+      fileBytes: _fileBytes,
     );
     setState(() => _isLoading = false);
     if (mounted) {

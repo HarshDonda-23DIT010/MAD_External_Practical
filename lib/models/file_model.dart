@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'dart:typed_data';
 
 part 'file_model.g.dart';
 
@@ -43,6 +44,9 @@ class FileModel extends HiveObject {
   @HiveField(12)
   String? filePath; // actual path to view the file
 
+  @HiveField(13)
+  Uint8List? fileBytes; // actual file bytes (mainly for Web support)
+
   FileModel({
     required this.id,
     required this.fileName,
@@ -57,6 +61,7 @@ class FileModel extends HiveObject {
     this.ownerId = 'current_user',
     this.fileSize = 0,
     this.filePath,
+    this.fileBytes,
   });
 
   FileModel copyWith({
@@ -73,6 +78,7 @@ class FileModel extends HiveObject {
     String? ownerId,
     int? fileSize,
     String? filePath,
+    Uint8List? fileBytes,
   }) {
     return FileModel(
       id: id ?? this.id,
@@ -88,6 +94,7 @@ class FileModel extends HiveObject {
       ownerId: ownerId ?? this.ownerId,
       fileSize: fileSize ?? this.fileSize,
       filePath: filePath ?? this.filePath,
+      fileBytes: fileBytes ?? this.fileBytes,
     );
   }
 }

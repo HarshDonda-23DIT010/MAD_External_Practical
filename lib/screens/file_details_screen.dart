@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:universal_html/html.dart' as html;
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:open_filex/open_filex.dart';
@@ -90,12 +92,21 @@ class _FileDetailsScreenState extends State<FileDetailsScreen> with SingleTicker
                   _chip(AppTheme.formatFileSize(file.fileSize), AppTheme.textSecondary),
                   if (file.isShared) ...[const SizedBox(width: 6), _chip('Shared', AppTheme.primaryColor)],
                 ]),
-                if (file.filePath != null) ...[
+                if (file.filePath != null || (kIsWeb && file.fileBytes != null)) ...[
                   const SizedBox(height: 12),
                   SizedBox(
                     height: 32,
                     child: ElevatedButton.icon(
-                      onPressed: () => OpenFilex.open(file.filePath!),
+                      onPressed: () {
+                        if (kIsWeb && file.fileBytes != null) {
+                          final blob = html.Blob([file.fileBytes!]);
+                          final url = html.Url.createObjectUrlFromBlob(blob);
+                          html.window.open(url, '_blank');
+                          html.Url.revokeObjectUrl(url);
+                        } else if (file.filePath != null) {
+                          OpenFilex.open(file.filePath!);
+                        }
+                      },
                       icon: const Icon(Icons.open_in_new_rounded, size: 16),
                       label: const Text('Open File', style: TextStyle(fontSize: 12)),
                       style: ElevatedButton.styleFrom(
